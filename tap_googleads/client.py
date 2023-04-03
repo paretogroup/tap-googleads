@@ -80,7 +80,7 @@ class GoogleAdsStream(RESTStream):
         if "user_agent" in self.config:
             headers["User-Agent"] = self.config.get("user_agent")
         headers["developer-token"] = self.config["developer_token"]
-        headers["login-customer-id"] = self.config["customer_id"]
+        headers["login-customer-id"] = self.config["login_customer_id"] or self.config["customer_id"]
         return headers
 
     def get_next_page_token(
@@ -112,6 +112,11 @@ class GoogleAdsStream(RESTStream):
             params["sort"] = "asc"
             params["order_by"] = self.replication_key
         return params
+
+    def response_error_message(self, response: requests.Response) -> str:
+        msg = super().response_error_message(response)
+        data = response.json()
+        return msg + f". Error: {data}"
 
     @property
     def start_date(self):

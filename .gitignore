@@ -134,3 +134,6 @@ dmypy.json
 
 # vscode settings
 .vscode
+
+# IDEA settings
+.idea
